@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/locale/de.js"></script>
+
+
+<body ng-app="myApp">
+
+<p>Try writing in the input field:</p>
+
+<form name="myForm">
+<input name="myInput" ng-model="myInput" required future-validator>
+</form>
+
+<p>The input's valid state is:</p>
+<h1>{{myForm.myInput.$valid}}</h1>
+
+<script>
+var app = angular.module('myApp', []);
+app.directive('futureValidator', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, element, attr, mCtrl) {
+            function myValidation(value) {
+                var date=moment(value,"DD.MM.YYYY");
+                if (moment().diff(date)>=0) {
+                    mCtrl.$setValidity('notfuture', true);
+                } else {
+                    mCtrl.$setValidity('notfuture', false);
+                }
+                return value;
+            }
+            mCtrl.$parsers.push(myValidation);
+        }
+    };
+});
+</script>
+
+<p>The input field must not contain a future date to be considered valid.</p>
+
+</body>
+</html>
