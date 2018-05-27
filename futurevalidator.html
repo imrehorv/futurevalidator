@@ -11,6 +11,7 @@
 
 <form name="myForm">
 <input name="myInput" ng-model="myInput" required future-validator>
+<div ng-show="myForm.myInput.$error.notfuture" style="background-color: red">Date cannot be in the future</div>
 </form>
 
 <p>The input's valid state is:</p>
